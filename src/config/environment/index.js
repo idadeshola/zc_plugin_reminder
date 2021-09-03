@@ -9,6 +9,7 @@ dotenv.config()
 
 const env = {
 	PORT: process.env.PORT,
+	REMINDER_COLLECTION: process.env.REMINDERS_COLLECTION,
 	BASE_URL: process.env.BASE_URL,
 	ENVIRONMENT: {
 		development: process.env.NODE_ENV === 'development',
@@ -30,7 +31,7 @@ const env = {
 	getDevBaseUrl() {
 		const self = env
 		if (self.ENVIRONMENT.development || self.ENVIRONMENT.test) {
-			self.BASE_URL = 'https://mock-dbapi.herokuapp.com/api'
+			self.BASE_URL = 'https://zccore.herokuapp.com/'
 		}
 		return self.BASE_URL
 	},

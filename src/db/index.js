@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import env from '@config/environment'
 
-const { getDevBaseUrl, ORG_ID, PLUGIN_ID } = env
+const { getDevBaseUrl, ORG_ID, PLUGIN_ID, REMINDER_COLLECTION } = env
 
 export default function makeDb() {
 	// functions go here
@@ -23,5 +23,27 @@ export default function makeDb() {
 		return data
 	}
 
-	return Object.freeze({ findAll })
+	async function update({ id, ...params }) {
+		try {
+			const res = await axios({
+				method: 'put',
+				url: `${getDevBaseUrl()}/data/write`,
+				data: {
+					plugin_id: PLUGIN_ID,
+					organization_id: ORG_ID,
+					collection_name: REMINDER_COLLECTION,
+					filter: {
+						object_id: id,
+					},
+					payload: { ...params },
+				},
+			})
+			const data = res.data.data.modified_documents > 0
+			return data
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	return Object.freeze({ findAll, update })
 }
